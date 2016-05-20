@@ -4,6 +4,7 @@ cache:
     - $HOME/.cache/pip
 sudo: false
 python:
+  - "3.4"
   - "3.5"
 install:
   - make setup
