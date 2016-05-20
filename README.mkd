@@ -1,4 +1,4 @@
-# Tsuru router tailer
+# Tsuru router tailer [![Coverage Status](https://coveralls.io/repos/github/guilhermef/tsuru-router-tailer/badge.svg?branch=master)](https://coveralls.io/github/guilhermef/tsuru-router-tailer?branch=master) [![Build Status](https://travis-ci.org/guilhermef/tsuru-router-tailer.svg?branch=master)](https://travis-ci.org/guilhermef/tsuru-router-tailer)
 Send tsuru router logs to logstash
 
 ## install:
