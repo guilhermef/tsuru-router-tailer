@@ -10,3 +10,5 @@ static flake8:
 
 focus:
 	@coverage run --branch `which nosetests` -vv --with-yanc --logging-level=WARNING --with-focus -i -s tests/
+
+test: unit static
