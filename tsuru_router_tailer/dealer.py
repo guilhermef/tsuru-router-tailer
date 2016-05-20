@@ -1,42 +1,34 @@
 import re
+import asyncio
+
+sender = None
 
 
-class Dealer(object):
-    def __init__(self, logstash=None):
-        self.logstash = logstash
+class Dealer(asyncio.SubprocessProtocol):
 
-    def connection_made(self, *args):
-        pass
+    def __init__(self):
+        super()
+        self.complete = asyncio.Future()
+        self.sender = sender
 
-    def pipe_data_received(self, line, data=None):
-        if line.startswith('tail: '):
+    def pipe_data_received(self, data, line):
+        if line.startswith(b'tail: '):
             return
         result = self.do_line(line.rstrip())
-        self.send_to_logstash(result)
-
-    def send_to_logstash(self, log_json):
-        pass
-
-    def connection_lost(self, *args):
-        pass
-
-    def pipe_connection_lost(self, *args):
-        pass
-
-    def process_exited(self, *args):
-        pass
+        if self.sender:
+            self.sender.send(result)
 
     def do_line(self, line):
-        tsuru_app = line.split(" ")[-3].replace('"', '').split('.')[0]
-        value = line.split(" ")[-2]
-        r = r'.* "(?P<method>\w+) (?P<path>.*) HTTP.*" (?P<status_code>\d{3}).*'
+        tsuru_app = line.split(b" ")[-3].replace(b'"', b'').split(b'.')[0]
+        value = line.split(b" ")[-2]
+        r = b'.* "(?P<method>\w+) (?P<path>.*) HTTP.*" (?P<status_code>\d{3}).*'
         info = re.search(r, line)
         return {
             "metric": "response_time",
             "client": "tsuru",
-            "app": tsuru_app,
+            "app": tsuru_app.decode('utf-8'),
             "value": float(value),
-            "path": info.groupdict()['path'],
-            "method": info.groupdict()['method'],
-            "status_code": info.groupdict()['status_code']
+            "path": info.groupdict()['path'].decode('utf-8'),
+            "method": info.groupdict()['method'].decode('utf-8'),
+            "status_code": info.groupdict()['status_code'].decode('utf-8')
         }

@@ -6,8 +6,11 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description='''
     Tail tsuru route and send to logstash''')
-    parser.add_argument('--log-path', help='path to log file')
+    parser.add_argument('--log', help='path to log file')
     parser.add_argument('--logstash', help='logstash URL')
     args = parser.parse_args()
 
-    runner.Runner(args, '').run()
+    runner.Runner(
+        log_path=args.log,
+        logstash=args.logstash
+    ).run()

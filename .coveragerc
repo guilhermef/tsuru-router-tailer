@@ -1,0 +1,11 @@
+[run]
+omit =
+    test_*.py
+branch = True
+source =
+    tsuru_router_tailer
+
+[report]
+exclude_lines =
+    from nose_focus import focus
+    @focus
