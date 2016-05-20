@@ -1,0 +1,26 @@
+# Tsuru router tailer
+Send tsuru router logs to logstash
+
+## install:
+```
+pip install tsuru_router_tailer
+```
+
+## running:
+```
+tsuru-router-tailer --logstash 'localhost:420' 'some_file.log'
+```
+
+## options:
+```
+usage: tsuru-router-tailer [-h] --logstash LOGSTASH log
+
+Tail tsuru route and send to logstash
+
+positional arguments:
+log                  path to log file
+
+optional arguments:
+-h, --help           show this help message and exit
+--logstash LOGSTASH  logstash URL
+```

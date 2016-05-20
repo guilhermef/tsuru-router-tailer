@@ -11,8 +11,8 @@ class TestMain(unittest.TestCase):
     def test_call_runner(self, runner_mock):
         with mock.patch.object(sys, 'argv', [
                 '',
-                '--log', '/much/path',
                 '--logstash', 'localhost:420',
+                '/much/path',
         ]):
             main()
         runner_mock.assert_called_once_with(

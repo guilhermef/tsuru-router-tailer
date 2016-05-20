@@ -18,4 +18,4 @@ focus:
 test: unit static
 
 run:
-	@tsuru-router-tailer --log 'some_file.log' --logstash 'localhost:420'
+	@tsuru-router-tailer --logstash 'localhost:420' 'some_file.log'
