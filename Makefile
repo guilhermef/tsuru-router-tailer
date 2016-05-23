@@ -15,7 +15,13 @@ static flake8:
 focus:
 	@coverage run --branch `which nosetests` -vv --with-yanc --logging-level=WARNING --with-focus -i -s tests/
 
-test: unit static
+test: redis unit static
 
 run:
 	@tsuru-router-tailer --logstash 'localhost:420' 'some_file.log'
+
+kill_redis:
+	@-redis-cli 'SHUTDOWN'
+
+redis: kill_redis
+	@redis-server redis.conf; sleep 1

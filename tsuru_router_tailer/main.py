@@ -9,6 +9,7 @@ def main():
     Tail tsuru route and send to logstash''')
     parser.add_argument('log', help='path to log file')
     parser.add_argument('--logstash', required=True, help='logstash URL')
+    parser.add_argument('--redis', help='Redis URL', default='localhost:6379')
     parser.add_argument(
         '-d',
         '--debug',
@@ -30,5 +31,6 @@ def main():
     )
     runner.Runner(
         log_path=args.log,
-        logstash=args.logstash
+        logstash=args.logstash,
+        redis=args.redis,
     ).run()

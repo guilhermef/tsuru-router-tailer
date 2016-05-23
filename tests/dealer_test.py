@@ -4,8 +4,9 @@ from preggy import expect
 
 from tsuru_router_tailer.dealer import Dealer
 from tsuru_router_tailer.sender import Sender
+from redis import Redis
 
-LINE = b'::ffff:10.0.0.96 - - [19/May/2016:23:26:25 +0000] "POST / HTTP/1.1" 200 13 "http://google.com" "Mozilla/5.0" ":" "app.tsuru.com" 0.012 0.012'
+LINE = b'::ffff:10.0.0.96 - - [19/May/2016:23:26:25 +0000] "POST / HTTP/1.1" 200 13 "http://google.com" "Mozilla/5.0" ":" "app.com" 0.012 0.012'
 LOG_JSON = {
     'path': '/',
     'client': 'tsuru',
@@ -20,7 +21,11 @@ LOG_JSON = {
 class TestDealer(unittest.TestCase):
 
     def setUp(self):
+        redis = Redis(*'localhost:6379'.split(':'))
         self.dealer = Dealer()
+        self.dealer.redis = redis
+        redis.flushdb()
+        redis.lpush('frontend:app.com', 'http://much.host:0420', 'app')
 
     def test_generate_json(self):
         expect(self.dealer.do_line(LINE)).\

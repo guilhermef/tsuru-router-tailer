@@ -2,6 +2,7 @@ import re
 import asyncio
 
 sender = None
+redis = None
 
 
 class Dealer(asyncio.SubprocessProtocol):
@@ -10,6 +11,7 @@ class Dealer(asyncio.SubprocessProtocol):
         super()
         self.complete = asyncio.Future()
         self.sender = sender
+        self.redis = redis
 
     def pipe_data_received(self, data, line):
         if line.startswith(b'tail: '):
@@ -19,7 +21,7 @@ class Dealer(asyncio.SubprocessProtocol):
             self.sender.send(result)
 
     def do_line(self, line):
-        tsuru_app = line.split(b" ")[-3].replace(b'"', b'').split(b'.')[0]
+        tsuru_app = self.get_app_name(line.split(b" ")[-3].replace(b'"', b'').replace(b"'", b''))
         value = line.split(b" ")[-2]
         r = b'.* "(?P<method>\w+) (?P<path>.*) HTTP.*" (?P<status_code>\d{3}).*'
         info = re.search(r, line)
@@ -32,3 +34,6 @@ class Dealer(asyncio.SubprocessProtocol):
             "method": info.groupdict()['method'].decode('utf-8'),
             "status_code": info.groupdict()['status_code'].decode('utf-8')
         }
+
+    def get_app_name(self, hostname):
+        return self.redis.lrange(b"frontend:%s" % hostname, 0, -1)[0]

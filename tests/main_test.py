@@ -12,12 +12,14 @@ class TestMain(unittest.TestCase):
         with mock.patch.object(sys, 'argv', [
                 '',
                 '--logstash', 'localhost:420',
+                '--redis', 'localhost:6379',
                 '/much/path',
         ]):
             main()
         runner_mock.assert_called_once_with(
             log_path='/much/path',
-            logstash='localhost:420'
+            logstash='localhost:420',
+            redis='localhost:6379'
         )
 
     @mock.patch('tsuru_router_tailer.runner.Runner')
@@ -31,5 +33,6 @@ class TestMain(unittest.TestCase):
             main()
         runner_mock.assert_called_once_with(
             log_path='/much/path',
-            logstash='localhost:420'
+            logstash='localhost:420',
+            redis='localhost:6379'
         )

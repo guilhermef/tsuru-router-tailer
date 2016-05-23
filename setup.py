@@ -35,10 +35,12 @@ setup(
     package_dir={"tsuru_router_tailer": "tsuru_router_tailer"},
     include_package_data=True,
 
-    install_requires=[],
+    install_requires=[
+        'redis',
+    ],
 
     extras_require={
-    'tests': tests_require,
+        'tests': tests_require,
     },
 
     entry_points={
