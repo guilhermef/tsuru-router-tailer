@@ -36,4 +36,4 @@ class Dealer(asyncio.SubprocessProtocol):
         }
 
     def get_app_name(self, hostname):
-        return self.redis.lrange(b"frontend:%s" % hostname, 0, -1)[0]
+        return self.redis.lrange("frontend:{}".format(hostname.decode('utf-8')), 0, -1)[0]
