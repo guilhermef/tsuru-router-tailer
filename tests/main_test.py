@@ -19,3 +19,17 @@ class TestMain(unittest.TestCase):
             log_path='/much/path',
             logstash='localhost:420'
         )
+
+    @mock.patch('tsuru_router_tailer.runner.Runner')
+    def test_call_runner_with_debug(self, runner_mock):
+        with mock.patch.object(sys, 'argv', [
+                '',
+                '-d',
+                '--logstash', 'localhost:420',
+                '/much/path',
+        ]):
+            main()
+        runner_mock.assert_called_once_with(
+            log_path='/much/path',
+            logstash='localhost:420'
+        )

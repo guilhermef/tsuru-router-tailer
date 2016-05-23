@@ -33,6 +33,11 @@ class TestDealer(unittest.TestCase):
         send_to_mock.assert_called_once_with(LOG_JSON)
 
     @mock.patch.object(Sender, 'send')
+    def test_send_ignore_line_without_sender(self, send_to_mock):
+        self.dealer.pipe_data_received(1, LINE)
+        self.assertFalse(send_to_mock.called)
+
+    @mock.patch.object(Sender, 'send')
     def test_should_ignore_tail_warning(self, send_to_mock):
         self.dealer.pipe_data_received(
             1,
